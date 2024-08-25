@@ -41,7 +41,7 @@
                                 </a>
                             </td>
                             <td>
-                                @if ($message->article->artifacts->released_at)
+                                @if ($message->article?->artifacts->released_at)
                                     <span class="badge bg-success">Released</span>
                                 @elseif ($message->processed_at)
                                     <span class="badge bg-primary">Processed</span>
