@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Example</title>
+</head>
+<body>
+  <h1>WebSocket Connection Example</h1>
+  <button id="connectBtn">Connect to WebSocket</button>
+  <button id="sendBtn">Send Message</button>
+  <div id="messages"></div>
+
+  <script>
+    let socket;
+
+    document.getElementById('connectBtn').addEventListener('click', function() {
+      // Create a new WebSocket connection
+      socket = new WebSocket('wss://api.canvas.playinzoi.com');
+
+      // Connection opened
+      socket.addEventListener('open', function (event) {
+        console.log('Connected to WebSocket server.');
+        document.getElementById('messages').innerHTML += '<p>Connected to WebSocket server.</p>';
+      });
+
+      // Listen for messages
+      socket.addEventListener('message', function (event) {
+        console.log('Message from server:', event.data);
+        document.getElementById('messages').innerHTML += `<p>Message from server: ${event.data}</p>`;
+      });
+
+      // Connection closed
+      socket.addEventListener('close', function (event) {
+        console.log('Disconnected from WebSocket server.');
+        document.getElementById('messages').innerHTML += '<p>Disconnected from WebSocket server.</p>';
+      });
+
+      // Handle errors
+      socket.addEventListener('error', function (event) {
+        console.error('WebSocket error:', event);
+        document.getElementById('messages').innerHTML += '<p>WebSocket error occurred.</p>';
+      });
+    });
+
+    document.getElementById('sendBtn').addEventListener('click', function() {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        const message = 'Hello, WebSocket!';
+        socket.send(message);
+        console.log('Sent message:', message);
+        document.getElementById('messages').innerHTML += `<p>Sent message: ${message}</p>`;
+      } else {
+        console.error('WebSocket is not open.');
+        document.getElementById('messages').innerHTML += '<p>WebSocket is not open. Cannot send message.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
